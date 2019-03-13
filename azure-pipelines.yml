@@ -18,23 +18,27 @@ jobs:
   strategy:
     matrix:
       Linux:
+        poolName: 'Hosted Ubuntu 1604'
         imageName: 'ubuntu-16.04'
         cCompiler: gcc
         cxxCompiler: g++
         compilerInitialization: ''
       macOS:
+        poolName: 'Hosted macOS'
         imageName: 'macos-10.13'
         cCompiler: clang
         cxxCompiler: clang++
         compilerInitialization: ''
       Windows:
+        poolName: 'Hosted VS2017'
         imageName: 'vs2017-win2016'
         cCompiler: cl.exe
         cxxCompiler: cl.exe
         compilerInitialization: 'call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars64.bat"'
 
   pool:
-    vmImage: $(imageName)
+    name: '$(poolName)'
+    vmImage: '$(imageName)'
 
   steps:
   - bash: |
@@ -147,6 +151,7 @@ jobs:
   cancelTimeoutInMinutes: 300
   displayName: "Build Linux Python packages"
   pool:
+    name: 'Hosted Ubuntu 1604'
     vmImage: 'Ubuntu-16.04'
 
   steps:
@@ -171,6 +176,7 @@ jobs:
   timeoutInMinutes: 0
   cancelTimeoutInMinutes: 300
   pool:
+    name: 'Hosted macOS'
     vmImage: 'macos-10.13'
 
   steps:
@@ -195,6 +201,7 @@ jobs:
   timeoutInMinutes: 0
   cancelTimeoutInMinutes: 300
   pool:
+    name: 'Hosted VS2017'
     vmImage: 'vs2017-win2016'
 
   steps:
