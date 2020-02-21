@@ -45,6 +45,7 @@ jobs:
       - run:
           name: Fetch build script
           command: |
+            cd ~/ITKTwoProjectionRegistration
             curl -L https://raw.githubusercontent.com/InsightSoftwareConsortium/ITKPythonPackage/master/scripts/dockcross-manylinux-download-cache-and-build-module-wheels.sh -O
             chmod u+x dockcross-manylinux-download-cache-and-build-module-wheels.sh
       - run:
