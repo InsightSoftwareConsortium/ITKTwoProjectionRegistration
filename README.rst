@@ -1,10 +1,17 @@
-ITKTwoProjectionRegistration
-============================
+TwoProjectionRegistration
+=================================
 
 .. image:: https://dev.azure.com/InsightSoftwareConsortium/ITKModules/_apis/build/status/InsightSoftwareConsortium.ITKTwoProjectionRegistration?branchName=master
     :target: https://dev.azure.com/InsightSoftwareConsortium/ITKModules/_build/latest?definitionId=13&branchName=master
     :alt: Build Status
 
+.. image:: https://img.shields.io/pypi/v/itk-twoprojectregistration.svg
+    :target: https://pypi.python.org/pypi/itk-twoprojectregistration
+    :alt: PyPI Version
+
+.. image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
+    :target: https://github.com/InsightSoftwareConsortium/TwoProjectionRegistration/blob/master/LICENSE)
+    :alt: License
 
 Overview
 --------

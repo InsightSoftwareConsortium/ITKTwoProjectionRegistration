@@ -55,12 +55,13 @@ jobs:
       python -m pip install --upgrade pip
       python -m pip install --upgrade setuptools
       python -m pip install scikit-ci-addons
-      python -m pip install cookiecutter
       python -m pip install ninja
     displayName: 'Install build dependencies'
 
   - script: |
       git clone --depth 5 --branch $(ITKGitTag) https://github.com/InsightSoftwareConsortium/ITK.git
+      cd ITK
+      git checkout $(ITKGitTag)
     workingDirectory: $(Agent.BuildDirectory)
     displayName: 'Download ITK'
 
@@ -78,15 +79,10 @@ jobs:
     displayName: 'Fetch CTest driver script'
 
   - bash: |
-      python -m cookiecutter --no-input --output-dir "$(Agent.BuildDirectory)" "$(Build.SourcesDirectory)"
-      mkdir "$(Agent.BuildDirectory)/ITKModuleTemplate/.git"
-    displayName: 'Evaluate template'
-
-  - bash: |
       cat > dashboard.cmake << EOF
       set(CTEST_SITE "Azure.\$ENV{AGENT_MACHINENAME}")
       file(TO_CMAKE_PATH "\$ENV{AGENT_BUILDDIRECTORY}" CTEST_DASHBOARD_ROOT)
-      file(TO_CMAKE_PATH "\$ENV{AGENT_BUILDDIRECTORY}/ITKModuleTemplate" CTEST_SOURCE_DIRECTORY)
+      file(TO_CMAKE_PATH "\$ENV{BUILD_SOURCESDIRECTORY}" CTEST_SOURCE_DIRECTORY)
       file(TO_CMAKE_PATH "\$ENV{AGENT_BUILDDIRECTORY}/build" CTEST_BINARY_DIRECTORY)
       set(dashboard_source_name "$(Build.Repository.Name)")
       if(DEFINED ENV{SYSTEM_PULLREQUEST_SOURCEBRANCH})
@@ -138,7 +134,7 @@ jobs:
       sudo pip3 install --upgrade pip
       sudo pip3 install --upgrade setuptools
       sudo pip3 install scikit-ci-addons
-      ci_addons ctest_junit_formatter "$(Agent.BuildDirectory)/build" > "$(Agent.BuildDirectory)/JUnitTestResults.xml"
+      ci_addons ctest_junit_formatter $(Agent.BuildDirectory)/build > $(Agent.BuildDirectory)/JUnitTestResults.xml
     condition: succeededOrFailed()
     displayName: 'Format CTest output in JUnit format'
 
@@ -169,20 +165,14 @@ jobs:
       architecture: 'x64'
 
   - script: |
-      python -m pip install cookiecutter
-      python -m cookiecutter --no-input --output-dir $(Agent.BuildDirectory) $(Build.SourcesDirectory)
-    displayName: 'Evaluate template'
-
-  - script: |
-      cd $(Agent.BuildDirectory)/ITKModuleTemplate
       export ITK_PACKAGE_VERSION=$(ITKPythonGitTag)
-      $(Build.SourcesDirectory)/dockcross-manylinux-download-cache-and-build-module-wheels.sh
+      ./dockcross-manylinux-download-cache-and-build-module-wheels.sh
     displayName: 'Build Python packages'
 
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'LinuxWheels'
-      targetPath: '$(Agent.BuildDirectory)/ITKModuleTemplate/dist'
+      targetPath: './dist'
 
 
 - job: 'PackageMacOS'
@@ -199,20 +189,14 @@ jobs:
     displayName: 'Fetch build script'
 
   - script: |
-      python -m pip install cookiecutter
-      python -m cookiecutter --no-input --output-dir $(Agent.BuildDirectory) $(Build.SourcesDirectory)
-    displayName: 'Evaluate template'
-
-  - script: |
-      cd $(Agent.BuildDirectory)/ITKModuleTemplate
       export ITK_PACKAGE_VERSION=$(ITKPythonGitTag)
-      $(Build.SourcesDirectory)/macpython-download-cache-and-build-module-wheels.sh
+      ./macpython-download-cache-and-build-module-wheels.sh
     displayName: 'Build Python packages'
 
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'MacOSWheels'
-      targetPath: '$(Agent.BuildDirectory)/ITKModuleTemplate/dist'
+      targetPath: './dist'
 
 
 - job: 'PackageWindows'
@@ -228,20 +212,14 @@ jobs:
     displayName: 'Fetch build script'
 
   - script: |
-      python -m pip install cookiecutter
-      python -m cookiecutter --no-input --output-dir $(Agent.BuildDirectory) $(Build.SourcesDirectory)
-    displayName: 'Evaluate template'
-
-  - script: |
       call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-      cd $(Agent.BuildDirectory)\ITKModuleTemplate
       set ITK_PACKAGE_VERSION=$(ITKPythonGitTag)
       set CC=cl.exe
       set CXX=cl.exe
-      powershell.exe -file $(Build.SourcesDirectory)\windows-download-cache-and-build-module-wheels.ps1
+      powershell.exe -file .\windows-download-cache-and-build-module-wheels.ps1
     displayName: 'Build Python packages'
 
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'WindowsWheels'
-      targetPath: '$(Agent.BuildDirectory)/ITKModuleTemplate/dist'
+      targetPath: './dist'
