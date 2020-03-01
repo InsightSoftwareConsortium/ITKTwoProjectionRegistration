@@ -5,7 +5,7 @@ set(TwoProjectionRegistrationTests
   GetDRRSiddonJacobsRayTracing.cxx
   )
 
-CreateTestDriver(TwoProjectionRegistration "${TwoProjectionRegistration_LIBRARIES}" "${TwoProjectionRegistrationTests}")
+CreateTestDriver(TwoProjectionRegistration "${TwoProjectionRegistration-Test_LIBRARIES}" "${TwoProjectionRegistrationTests}")
 
 itk_add_test(NAME TwoProjection2D3DRegistrationDownSizedCTTest
   COMMAND TwoProjectionRegistrationTestDriver TwoProjection2D3DRegistration

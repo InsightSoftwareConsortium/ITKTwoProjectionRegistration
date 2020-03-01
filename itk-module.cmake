@@ -20,6 +20,12 @@ itk_module(TwoProjectionRegistration
     ITKSpatialObjects
     ITKTransform
   TEST_DEPENDS
+    ITKImageFunction
+    ITKImageGradient
+    ITKOptimizers
+    ITKRegistrationCommon
+    ITKSpatialObjects
+    ITKTransform
     ITKTestKernel
   DESCRIPTION
     "${DOCUMENTATION}"
