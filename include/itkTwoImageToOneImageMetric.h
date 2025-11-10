@@ -81,9 +81,7 @@ public:
   static constexpr unsigned int FixedImageDimension = TFixedImage::ImageDimension;
 
   /**  Type of the Transform Base class */
-  using TransformType = Transform<CoordinateRepresentationType,
-                                  Self::MovingImageDimension,
-                                  Self::FixedImageDimension>;
+  using TransformType = Transform<CoordinateRepresentationType, Self::MovingImageDimension, Self::FixedImageDimension>;
 
   using TransformPointer = typename TransformType::Pointer;
   using InputPointType = typename TransformType::InputPointType;
