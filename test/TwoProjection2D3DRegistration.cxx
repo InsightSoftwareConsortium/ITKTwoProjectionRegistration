@@ -46,7 +46,7 @@
 // We have chosen to implement the registration using the normalized coorelation
 // similarity measure.
 
-//#include "itkGradientDifferenceTwoImageToOneImageMetric.h"
+// #include "itkGradientDifferenceTwoImageToOneImageMetric.h"
 #include "itkNormalizedCorrelationTwoImageToOneImageMetric.h"
 
 // This is an intensity based registration algorithm so ray casting is
